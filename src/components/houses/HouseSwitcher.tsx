@@ -185,22 +185,23 @@ export const HouseSwitcher: React.FC<HouseSwitcherProps> = ({ onSelectHouseForBo
               <div className={styles.priceCard}>
                 <div className={styles.priceColumn}>
                   <div className={styles.priceRow}>
-                    <span className={styles.priceType}>Будние дни (пн-чт):</span>
-                    <span className={styles.priceValue}>{formatNumber(currentHouse.priceWeekday)} ₽ / сут.</span>
+                    <span className={styles.priceType}>Будние дни (пн–чт):</span>
+                    <span className={styles.priceValue}>{formatNumber(currentHouse.priceWeekday)} ₽/сут.</span>
                   </div>
                   <div className={styles.priceRow}>
-                    <span className={styles.priceType}>Выходные (пт-вс, праздники):</span>
-                    <span className={styles.priceValueWeekend}>{formatNumber(currentHouse.priceWeekend)} ₽ / сут.</span>
+                    <span className={styles.priceType}>Выходные (пт–вс):</span>
+                    <span className={styles.priceValueWeekend}>{formatNumber(currentHouse.priceWeekend)} ₽/сут.</span>
                   </div>
                 </div>
 
                 <Button
                   variant="amber"
-                  size="lg"
+                  size="md"
+                  className={styles.bookHouseBtn}
                   rightIcon={<ArrowRight size={18} />}
                   onClick={handleBookClick}
                 >
-                  Забронировать этот дом
+                  Забронировать дом
                 </Button>
               </div>
             </div>

@@ -123,12 +123,26 @@
 .dateInput {
   background: var(--bg-main);
   border: 1.5px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  padding: 10px 12px;
-  font-size: 0.875rem;
+  border-radius: var(--radius-md);
+  padding: 11px 14px;
+  font-size: 0.9375rem;
   color: #FFFFFF;
   font-weight: 500;
   cursor: pointer;
+  color-scheme: dark;
+}
+
+.dateInput::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(1) brightness(1.8);
+  opacity: 0.9;
+  padding: 2px;
+  transition: all var(--transition-fast);
+}
+
+.dateInput::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  transform: scale(1.1);
 }
 
 .dateInput:focus {

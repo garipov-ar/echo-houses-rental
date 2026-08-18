@@ -127,18 +127,18 @@
   border-radius: var(--radius-lg);
   padding: 16px 20px;
   display: grid;
-  grid-template-columns: 1.6fr 1fr;
+  grid-template-columns: 1.4fr 1fr;
   gap: 16px;
-  align-items: center;
+  align-items: flex-end;
   width: 100%;
-  max-width: 600px;
+  max-width: 620px;
   box-shadow: var(--shadow-lg);
 }
 
 .stripField {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .stripLabel {
@@ -152,16 +152,28 @@
 .stripSelect {
   background: var(--bg-main);
   color: #FFFFFF;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  padding: 10px 12px;
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0 14px;
+  height: 48px;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
+  width: 100%;
 }
 
 .stripSelect:focus {
   border-color: var(--color-amber);
+}
+
+.stripAction {
+  display: flex;
+  align-items: flex-end;
+}
+
+.stripAction button {
+  height: 48px;
+  margin: 0;
 }
 
 @media (max-width: 640px) {
