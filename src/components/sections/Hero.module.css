@@ -1,0 +1,182 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  padding-top: calc(var(--header-height) + 60px);
+  padding-bottom: 80px;
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-main);
+  background-image: linear-gradient(to right, rgba(14, 19, 16, 0.95) 30%, rgba(14, 19, 16, 0.65) 100%),
+    url('https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=2000&q=85');
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+.bgOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 15% 40%, rgba(224, 139, 56, 0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.ambientGlow {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: rgba(46, 83, 57, 0.25);
+  filter: blur(100px);
+  top: 15%;
+  right: -50px;
+  pointer-events: none;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+}
+
+.content {
+  max-width: 780px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(224, 139, 56, 0.12);
+  border: 1px solid var(--border-amber);
+  color: var(--color-amber);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  margin-bottom: 24px;
+}
+
+.badgeIcon {
+  color: var(--color-amber);
+}
+
+.title {
+  font-size: clamp(2.35rem, 5vw, 3.75rem);
+  font-weight: 800;
+  line-height: 1.15;
+  color: #FFFFFF;
+  margin-bottom: 20px;
+}
+
+.highlight {
+  background: linear-gradient(135deg, #F5A85C 0%, #E08B38 50%, #FFB067 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.description {
+  font-size: clamp(1.0625rem, 1.8vw, 1.25rem);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 28px;
+  max-width: 660px;
+}
+
+.perks {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.perkItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+}
+
+.perkIcon {
+  color: var(--color-amber);
+}
+
+.ctaGroup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+
+.bookingStrip {
+  background: rgba(22, 29, 24, 0.92);
+  border: 1px solid var(--border-medium);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 16px;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: var(--shadow-lg);
+}
+
+.stripField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stripLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-amber);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stripSelect {
+  background: var(--bg-main);
+  color: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.stripSelect:focus {
+  border-color: var(--color-amber);
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding-top: calc(var(--header-height) + 30px);
+    padding-bottom: 60px;
+  }
+  .ctaGroup {
+    flex-direction: column;
+    width: 100%;
+  }
+  .ctaGroup button {
+    width: 100%;
+  }
+  .bookingStrip {
+    grid-template-columns: 1fr;
+  }
+}

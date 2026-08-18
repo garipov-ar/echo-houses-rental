@@ -1,0 +1,566 @@
+.calculatorBox {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.calculatorGrid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+}
+
+.formSection {
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.groupLabel {
+  font-family: var(--font-heading);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+/* House Options Selector */
+.houseSelectGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.houseOption {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-surface-elevated);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.houseOption:hover {
+  border-color: var(--color-amber);
+}
+
+.houseOptionSelected {
+  border-color: var(--color-amber) !important;
+  background: var(--color-amber-light) !important;
+  box-shadow: 0 0 0 1px var(--color-amber);
+}
+
+.houseOptImg {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-sm);
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+}
+
+.houseOptInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.houseOptTitle {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 2px;
+}
+
+.houseOptCapacity {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.houseOptPrice {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-amber);
+  margin-top: 4px;
+}
+
+/* Dates & Guests */
+.datesGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  background: var(--bg-surface-elevated);
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+}
+
+.fieldBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.dateInput {
+  background: var(--bg-main);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 0.875rem;
+  color: #FFFFFF;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.dateInput:focus {
+  border-color: var(--color-amber);
+}
+
+.counterWrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-main);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+}
+
+.counterBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface-elevated);
+  color: #FFFFFF;
+  font-size: 1.125rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.counterBtn:hover {
+  background: var(--color-amber);
+  color: #111613;
+}
+
+.counterValue {
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: #FFFFFF;
+}
+
+/* Spa Grid */
+.spaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.spaCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--bg-surface-elevated);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.spaCard:hover {
+  border-color: var(--color-amber);
+}
+
+.spaCardChecked {
+  border-color: var(--color-amber) !important;
+  background: var(--color-amber-light) !important;
+}
+
+.spaCheckbox {
+  margin-top: 2px;
+}
+
+.checkSquare {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #111613;
+  transition: all var(--transition-fast);
+}
+
+.checkSquareActive {
+  background-color: var(--color-amber);
+  border-color: var(--color-amber);
+}
+
+.spaText {
+  flex-grow: 1;
+}
+
+.spaHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.spaName {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.spaPrice {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-amber);
+  white-space: nowrap;
+}
+
+.spaDesc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+/* Contact Form */
+.contactForm {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.formHeadTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.errorBox {
+  background: rgba(220, 38, 38, 0.2);
+  border: 1px solid #DC2626;
+  color: #FCA5A5;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+}
+
+.contactInputsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.inputField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inputLbl {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.required {
+  color: #EF4444;
+}
+
+.inputIconWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.iconInside {
+  position: absolute;
+  left: 14px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.textInput {
+  width: 100%;
+  padding: 12px 14px 12px 40px;
+  background: var(--bg-main);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: #FFFFFF;
+  font-size: 0.9375rem;
+}
+
+.textInput:focus {
+  border-color: var(--color-amber);
+}
+
+.messengerChoice {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.msgToggles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.msgBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  background: var(--bg-main);
+  border: 1.5px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.msgBtn:hover {
+  border-color: var(--color-amber);
+}
+
+.msgBtnActive {
+  background: var(--color-amber-light);
+  border-color: var(--color-amber);
+  color: var(--color-amber);
+}
+
+.privacyNote {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* Sidebar */
+.sidebarSection {
+  background: #0B0F0C;
+  border-left: 1px solid var(--border-subtle);
+  padding: 32px 24px;
+}
+
+.sidebarSticky {
+  position: sticky;
+  top: calc(var(--header-height) + 20px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.summaryBadge {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-amber);
+}
+
+.summaryTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.grandPriceBox {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-amber);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.grandPriceNumber {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-amber);
+  line-height: 1.1;
+}
+
+.grandPriceNights {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.discountBanner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(46, 83, 57, 0.35);
+  border: 1px solid var(--color-pine-light);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
+  color: #A3D8B0;
+  font-weight: 600;
+}
+
+.billList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 16px;
+}
+
+.billItem {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.billVal {
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.depositNotice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  background: var(--bg-surface-elevated);
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  margin-top: 4px;
+}
+
+.depIcon {
+  color: var(--color-amber);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.inclusionsBox {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.incTitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.incList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.incCheck {
+  color: var(--color-amber);
+  margin-right: 4px;
+}
+
+/* Success Screen */
+.successWrapper {
+  padding: 64px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 580px;
+  margin: 0 auto;
+  gap: 16px;
+}
+
+.successIconCircle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--color-amber-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border-amber);
+}
+
+.successHeading {
+  font-size: 1.625rem;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.successId {
+  font-size: 0.9375rem;
+  color: var(--color-amber);
+  background: var(--bg-surface-elevated);
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+}
+
+.successDescription {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+  .calculatorGrid {
+    grid-template-columns: 1fr;
+  }
+  .sidebarSection {
+    border-left: none;
+    border-top: 1px solid var(--border-subtle);
+  }
+  .datesGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .formSection {
+    padding: 20px;
+  }
+  .houseSelectGrid, .spaGrid, .contactInputsRow, .msgToggles {
+    grid-template-columns: 1fr;
+  }
+}
