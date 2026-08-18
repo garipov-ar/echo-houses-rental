@@ -37,21 +37,23 @@ export const Header: React.FC = () => {
   return (
     <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
       <div className={`container ${styles.container}`}>
-        {/* Brand Logo */}
-        <a href="#" className={styles.logo} onClick={(e) => handleScrollTo(e, '#')}>
-          <div className={styles.logoIconWrap}>
-            <Trees size={22} className={styles.logoIcon} />
-          </div>
-          <div className={styles.logoText}>
-            <span className={styles.brandTitle}>ЭХО</span>
-            <span className={styles.brandSub}>Гостевые дома • Комсомольск</span>
-          </div>
-        </a>
+        {/* Brand Group */}
+        <div className={styles.brandWrapper}>
+          <a href="#" className={styles.logo} onClick={(e) => handleScrollTo(e, '#')}>
+            <div className={styles.logoIconWrap}>
+              <Trees size={22} className={styles.logoIcon} />
+            </div>
+            <div className={styles.logoText}>
+              <span className={styles.brandTitle}>ЭХО</span>
+              <span className={styles.brandSub}>Гостевые дома • Комсомольск</span>
+            </div>
+          </a>
 
-        {/* Location Tag */}
-        <div className={styles.locationTag}>
-          <MapPin size={14} className={styles.mapIcon} />
-          <span>ул. Комитетская, 1</span>
+          {/* Location Tag */}
+          <div className={styles.locationTag}>
+            <MapPin size={14} className={styles.mapIcon} />
+            <span>ул. Комитетская, 1</span>
+          </div>
         </div>
 
         {/* Desktop Nav */}
