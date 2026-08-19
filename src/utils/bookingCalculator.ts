@@ -2,7 +2,7 @@ import { HOUSES, House } from '../data/housesData';
 import { SPA_SERVICES } from '../data/spaData';
 
 export interface BookingCalculationInput {
-  houseId: 'a_frame' | 'chalet';
+  houseId: string;
   checkIn: string; // YYYY-MM-DD
   checkOut: string; // YYYY-MM-DD
   guests: number;

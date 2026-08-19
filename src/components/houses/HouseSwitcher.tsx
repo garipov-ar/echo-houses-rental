@@ -47,11 +47,11 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 };
 
 interface HouseSwitcherProps {
-  onSelectHouseForBooking?: (houseId: 'a_frame' | 'chalet') => void;
+  onSelectHouseForBooking?: (houseId: string) => void;
 }
 
 export const HouseSwitcher: React.FC<HouseSwitcherProps> = ({ onSelectHouseForBooking }) => {
-  const [selectedHouseId, setSelectedHouseId] = useState<'a_frame' | 'chalet'>('a_frame');
+  const [selectedHouseId, setSelectedHouseId] = useState<string>('a_frame');
   const [galleryModalOpen, setGalleryModalOpen] = useState(false);
   const [activePhotoIdx, setActivePhotoIdx] = useState(0);
 

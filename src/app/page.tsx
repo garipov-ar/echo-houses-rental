@@ -13,7 +13,7 @@ import { LocationMap } from '../components/sections/LocationMap';
 import { JsonLd } from '../components/seo/JsonLd';
 
 export default function EchoHomePage() {
-  const [selectedHouseForBooking, setSelectedHouseForBooking] = useState<'a_frame' | 'chalet'>('a_frame');
+  const [selectedHouseForBooking, setSelectedHouseForBooking] = useState<string>('a_frame');
 
   return (
     <>

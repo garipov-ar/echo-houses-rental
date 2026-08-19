@@ -1,0 +1,402 @@
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 6, 10, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.2s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modalCard {
+  background: #111622;
+  border: 1px solid rgba(229, 122, 34, 0.3);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 860px;
+  max-height: 92vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(229, 122, 34, 0.15);
+  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.headerTitle {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.closeBtn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #EF4444;
+}
+
+/* Month Navigation & Controls */
+.navBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.monthSwitcher {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.monthBtn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-amber);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.monthBtn:hover {
+  background: var(--color-amber);
+  color: #000;
+}
+
+.monthLabel {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  min-width: 150px;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legendDotAvailable {
+  width: 16px;
+  height: 4px;
+  border-radius: 2px;
+  background: #10B981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+.legendDotBooked {
+  width: 16px;
+  height: 4px;
+  border-radius: 2px;
+  background: #EF4444;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+}
+
+.legendDotSelected {
+  width: 16px;
+  height: 4px;
+  border-radius: 2px;
+  background: #38BDF8;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
+}
+
+/* Scrollable Matrix Table */
+.matrixWrapper {
+  padding: 16px 24px;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: calc(92vh - 200px);
+}
+
+.matrixTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 680px;
+}
+
+.thHouse {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  position: sticky;
+  left: 0;
+  background: #111622;
+  z-index: 10;
+  width: 180px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.thDay {
+  text-align: center;
+  padding: 8px 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  min-width: 38px;
+}
+
+.thDayWeekend {
+  color: #F87171 !important;
+}
+
+.houseRow {
+  transition: background 0.15s ease;
+}
+
+.houseRow:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.houseInfoCell {
+  padding: 14px 12px;
+  position: sticky;
+  left: 0;
+  background: #111622;
+  z-index: 10;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.houseName {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  white-space: nowrap;
+}
+
+.houseSub {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+.dayCell {
+  text-align: center;
+  padding: 10px 3px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  vertical-align: middle;
+}
+
+.dayBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 44px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  margin: 0 auto;
+  transition: all 0.15s ease;
+}
+
+.dayNum {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1;
+  margin-bottom: 5px;
+}
+
+.statusIndicatorAvailable {
+  width: 18px;
+  height: 4px;
+  border-radius: 2px;
+  background: #10B981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+  transition: transform 0.15s ease;
+}
+
+.statusIndicatorBooked {
+  width: 18px;
+  height: 4px;
+  border-radius: 2px;
+  background: #EF4444;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+  opacity: 0.9;
+}
+
+.statusIndicatorPast {
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.dayBtnAvailable:hover {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  transform: translateY(-1px);
+}
+
+.dayBtnBooked {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.dayBtnBooked .dayNum {
+  color: #94A3B8;
+}
+
+.dayBtnPast {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.dayBtnPast .dayNum {
+  color: #64748B;
+}
+
+.dayBtnSelected {
+  background: rgba(56, 189, 248, 0.25) !important;
+  border-color: #38BDF8 !important;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+.dayBtnSelected .dayNum {
+  color: #38BDF8;
+}
+
+.dayBtnSelected .statusIndicatorAvailable {
+  background: #38BDF8;
+  box-shadow: 0 0 8px #38BDF8;
+}
+
+/* Footer with Selection CTA */
+.modalFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(6, 8, 13, 0.95);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.selectionInfo {
+  font-size: 0.84rem;
+  color: #E2E8F0;
+}
+
+.selectionHighlight {
+  color: var(--color-amber);
+  font-weight: 700;
+}
+
+.applyBtn {
+  background: linear-gradient(135deg, var(--color-amber) 0%, #D97706 100%);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 16px rgba(229, 122, 34, 0.3);
+}
+
+.applyBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(229, 122, 34, 0.45);
+}
+
+@media (max-width: 640px) {
+  .modalHeader, .navBar, .matrixWrapper, .modalFooter {
+    padding: 12px 14px;
+  }
+  
+  .thHouse, .houseInfoCell {
+    width: 130px;
+  }
+
+  .houseName {
+    font-size: 0.78rem;
+  }
+
+  .modalFooter {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .applyBtn {
+    width: 100%;
+    justify-content: center;
+  }
+}
