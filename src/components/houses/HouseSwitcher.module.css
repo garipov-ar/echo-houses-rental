@@ -1,59 +1,97 @@
 .tabsContainer {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 36px;
+  margin-bottom: 32px;
 }
 
+/* Grid: 3 columns on desktop → 2 on tablet → 1 on mobile */
 .tabsList {
-  display: inline-flex;
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-full);
-  padding: 6px;
-  gap: 8px;
-  box-shadow: var(--shadow-md);
-  max-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .tabsList {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .tabsList {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 .tabBtn {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 24px;
-  border-radius: var(--radius-full);
-  background: transparent;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: var(--bg-surface);
+  border: 1.5px solid var(--border-subtle);
   color: var(--text-muted);
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all 0.18s ease;
+  text-align: left;
+  width: 100%;
 }
 
 .tabBtn:hover {
-  color: #FFFFFF;
+  border-color: rgba(229, 122, 34, 0.45);
+  background: rgba(229, 122, 34, 0.06);
+  color: #FFF;
 }
 
 .tabBtnActive {
-  background: linear-gradient(135deg, #2E5339 0%, #1F3826 100%);
-  border: 1px solid var(--border-amber);
+  background: linear-gradient(135deg, rgba(46, 83, 57, 0.7) 0%, rgba(31, 56, 38, 0.8) 100%) !important;
+  border-color: var(--border-amber) !important;
   color: #FFFFFF !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(229, 122, 34, 0.25);
+}
+
+/* Small thumbnail inside the tab */
+.tabThumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 9px;
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+  border: 1.5px solid rgba(255,255,255,0.08);
+}
+
+.tabBtnActive .tabThumb {
+  border-color: rgba(229, 122, 34, 0.5);
+}
+
+.tabInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
 }
 
 .tabName {
   font-family: var(--font-heading);
-  font-size: 1.0625rem;
+  font-size: 0.9rem;
   font-weight: 700;
+  color: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
 }
 
 .tabBadge {
-  font-size: 0.75rem;
-  padding: 2px 8px;
-  border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.68rem;
   color: var(--color-amber);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tabBtnActive .tabBadge {
-  background: rgba(224, 139, 56, 0.2);
+  color: #FBBF24;
 }
 
 /* House Card */

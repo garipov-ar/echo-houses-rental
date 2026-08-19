@@ -74,13 +74,13 @@ export const HouseSwitcher: React.FC<HouseSwitcherProps> = ({ onSelectHouseForBo
             <Sparkles size={14} />
             Выберите пространство для вашего отдыха
           </span>
-          <h2 className="section-heading">Два формата загородного уюта</h2>
+          <h2 className="section-heading">Шесть форматов загородного уюта</h2>
           <p className="section-subtitle">
-            Камерный A-Frame для романтических вечеров или просторный коттедж для теплых встреч с друзьями и праздников.
+            От камерного A-Frame для двоих до просторного шале на большую компанию — выберите свой дом.
           </p>
         </div>
 
-        {/* House Switcher Tabs */}
+        {/* House Switcher Grid */}
         <div className={styles.tabsContainer}>
           <div className={styles.tabsList}>
             {HOUSES.map((house) => (
@@ -92,8 +92,14 @@ export const HouseSwitcher: React.FC<HouseSwitcherProps> = ({ onSelectHouseForBo
                   setActivePhotoIdx(0);
                 }}
               >
-                <span className={styles.tabName}>{house.name}</span>
-                <span className={styles.tabBadge}>{house.badge}</span>
+                <div
+                  className={styles.tabThumb}
+                  style={{ backgroundImage: `url('${house.mainImage}')` }}
+                />
+                <div className={styles.tabInfo}>
+                  <span className={styles.tabName}>{house.name}</span>
+                  <span className={styles.tabBadge}>{house.badge}</span>
+                </div>
               </button>
             ))}
           </div>
