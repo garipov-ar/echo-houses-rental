@@ -501,22 +501,49 @@ export const BookingCalculator: React.FC<BookingCalculatorProps> = ({
                             Откройте приложение вашего банка для оплаты {formatNumber(amountToPayNow)} ₽:
                           </div>
                           <div className={styles.bankButtonsGrid}>
-                            <button type="button" className={styles.bankQuickBtn} onClick={() => {}}>
-                              <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#F59E0B' }} />
+                            {/* Т-Банк (Тинькофф) — SBP deep link */}
+                            <a
+                              href={`https://www.tbank.ru/payments/open/?amount=${amountToPayNow * 100}&description=${encodeURIComponent(`Бронирование ${currentHouse.name}`)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={styles.bankQuickBtn}
+                            >
+                              <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#F59E0B', flexShrink: 0 }} />
                               <span>Т-Банк (Тинькофф)</span>
-                            </button>
-                            <button type="button" className={styles.bankQuickBtn} onClick={() => {}}>
-                              <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#10B981' }} />
+                            </a>
+                            {/* Сбер — SBP universal link */}
+                            <a
+                              href={`https://online.sberbank.ru/CSAFront/index.do#transfer?amount=${amountToPayNow}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={styles.bankQuickBtn}
+                            >
+                              <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#10B981', flexShrink: 0 }} />
                               <span>СберБанк Онлайн</span>
-                            </button>
-                            <button type="button" className={styles.bankQuickBtn} onClick={() => {}}>
-                              <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#EF4444' }} />
+                            </a>
+                            {/* Альфа-Банк */}
+                            <a
+                              href={`https://click.alfabank.ru/aaa/api/click?amount=${amountToPayNow}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={styles.bankQuickBtn}
+                            >
+                              <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#EF4444', flexShrink: 0 }} />
                               <span>Альфа-Банк</span>
-                            </button>
-                            <button type="button" className={styles.bankQuickBtn} onClick={() => {}}>
-                              <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#3B82F6' }} />
+                            </a>
+                            {/* ВТБ */}
+                            <a
+                              href="https://online.vtb.ru/i/pay-by-link"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={styles.bankQuickBtn}
+                            >
+                              <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#3B82F6', flexShrink: 0 }} />
                               <span>ВТБ Онлайн</span>
-                            </button>
+                            </a>
+                          </div>
+                          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '8px', lineHeight: 1.4 }}>
+                            💡 Или отсканируйте QR-код камерой телефона — откроется приложение вашего банка автоматически
                           </div>
                         </div>
                       </div>

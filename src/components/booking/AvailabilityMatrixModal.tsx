@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { HOUSES } from '../../data/housesData';
-import { X, ChevronLeft, ChevronRight, Check, Calendar, Sparkles } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Check, Calendar } from 'lucide-react';
 import styles from './AvailabilityMatrixModal.module.css';
 
 interface AvailabilityMatrixModalProps {
@@ -14,65 +14,79 @@ interface AvailabilityMatrixModalProps {
   currentCheckOut?: string;
 }
 
-// Deterministic seedable generator for booked dates (Aug/Sep/Oct 2026)
-function isDateBooked(houseId: string, year: number, month: number, day: number): boolean {
-  // Deterministic realistic busy schedule simulation (e.g. August 2026 as in screenshot)
-  const hash = (houseId.charCodeAt(0) * 17 + houseId.charCodeAt(houseId.length - 1) * 31 + year * 100 + month * 31 + day) % 100;
-  
-  // Specific days matching the screenshot for August 2026:
-  // E.g., for A-Frame #2: 19, 20, 21, 22 are booked (red), 23 is green.
-  // For Scandi: 19, 20, 21, 22 are booked, 23 is green.
-  // For Hygge: 19, 20, 21, 22 are booked, 23 is green.
-  // For Provence: 19 (red), 20 (green), 21, 22 (red), 23 (green).
-  // For Maly Dom / Chalet: 19 (green), 20 (red), 21 (green), 22 (red), 23 (green).
-  if (year === 2026 && month === 7) { // August (0-indexed 7)
-    if (houseId === 'a_frame_2' || houseId === 'a_frame') {
-      if ([19, 20, 21, 22, 28, 29].includes(day)) return true;
-      if ([23, 24, 25, 26, 27, 30, 31].includes(day)) return false;
-    }
-    if (houseId === 'scandi') {
-      if ([19, 20, 21, 22, 26, 27].includes(day)) return true;
-      if ([23, 24, 25, 28, 29, 30, 31].includes(day)) return false;
-    }
-    if (houseId === 'hygge') {
-      if ([19, 20, 21, 22, 29, 30].includes(day)) return true;
-      if ([23, 24, 25, 26, 27, 28, 31].includes(day)) return false;
-    }
-    if (houseId === 'provence') {
-      if ([19, 21, 22, 27, 28].includes(day)) return true;
-      if ([20, 23, 24, 25, 26, 29, 30, 31].includes(day)) return false;
-    }
-    if (houseId === 'chalet') {
-      if ([20, 22, 28, 29].includes(day)) return true;
-      if ([19, 21, 23, 24, 25, 26, 27, 30, 31].includes(day)) return false;
-    }
-  }
+// ─────────────────────────────────────────────────────────────────
+// Deterministic occupancy schedule – realistic patterns per house.
+// Each entry is [month(0-indexed), day] → booked=true
+// ─────────────────────────────────────────────────────────────────
+const BOOKED_DATES: Record<string, string[]> = {
+  a_frame: [
+    '2026-08-19', '2026-08-20', '2026-08-21', '2026-08-22',
+    '2026-08-28', '2026-08-29', '2026-08-30',
+    '2026-09-05', '2026-09-06', '2026-09-07',
+    '2026-09-12', '2026-09-13', '2026-09-19', '2026-09-20',
+    '2026-10-02', '2026-10-03', '2026-10-09', '2026-10-10',
+  ],
+  a_frame_2: [
+    '2026-08-19', '2026-08-20', '2026-08-21', '2026-08-22',
+    '2026-08-27', '2026-08-28',
+    '2026-09-04', '2026-09-05', '2026-09-06',
+    '2026-09-18', '2026-09-19', '2026-09-20',
+    '2026-10-03', '2026-10-04',
+  ],
+  scandi: [
+    '2026-08-19', '2026-08-20', '2026-08-21', '2026-08-22',
+    '2026-08-26', '2026-08-27',
+    '2026-09-09', '2026-09-10', '2026-09-11',
+    '2026-09-25', '2026-09-26', '2026-09-27',
+    '2026-10-07', '2026-10-08',
+  ],
+  hygge: [
+    '2026-08-19', '2026-08-20', '2026-08-21', '2026-08-22',
+    '2026-08-29', '2026-08-30',
+    '2026-09-03', '2026-09-04', '2026-09-05',
+    '2026-09-17', '2026-09-18',
+    '2026-10-01', '2026-10-02', '2026-10-03',
+  ],
+  provence: [
+    '2026-08-19',
+    '2026-08-21', '2026-08-22',
+    '2026-08-27', '2026-08-28',
+    '2026-09-02', '2026-09-03',
+    '2026-09-13', '2026-09-14',
+    '2026-10-09', '2026-10-10', '2026-10-11',
+  ],
+  chalet: [
+    '2026-08-20', '2026-08-21', '2026-08-22',
+    '2026-08-28', '2026-08-29',
+    '2026-09-04', '2026-09-05', '2026-09-06', '2026-09-07',
+    '2026-09-22', '2026-09-23',
+    '2026-10-08', '2026-10-09', '2026-10-10',
+  ],
+};
 
-  // Weekends have higher occupancy in other months
-  const date = new Date(year, month, day);
-  const dayOfWeek = date.getDay();
-  if (dayOfWeek === 5 || dayOfWeek === 6) { // Fri, Sat
-    return hash > 40;
+function isDateBooked(houseId: string, dateStr: string): boolean {
+  const bookedList = BOOKED_DATES[houseId];
+  if (!bookedList) {
+    // Fallback deterministic schedule for unknown houses
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const jsDay = new Date(y, m - 1, d).getDay();
+    // book every other weekend
+    return (jsDay === 6 || jsDay === 0) && d % 3 === 0;
   }
-  return hash > 75;
+  return bookedList.includes(dateStr);
 }
 
+// ─────────────────────────────────────────────────────────────────
+
 const MONTH_NAMES = [
-  'январь',
-  'февраль',
-  'март',
-  'апрель',
-  'май',
-  'июнь',
-  'июль',
-  'август',
-  'сентябрь',
-  'октябрь',
-  'ноябрь',
-  'декабрь',
+  'январь', 'февраль', 'март', 'апрель', 'май', 'июнь',
+  'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь',
 ];
 
-const WEEKDAYS = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
+const WEEKDAYS_SHORT = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
+
+// Build a consistent "today" string that won't shift during render
+const TODAY_STR = new Date().toISOString().split('T')[0];
 
 export const AvailabilityMatrixModal: React.FC<AvailabilityMatrixModalProps> = ({
   isOpen,
@@ -82,96 +96,95 @@ export const AvailabilityMatrixModal: React.FC<AvailabilityMatrixModalProps> = (
   currentCheckIn,
   currentCheckOut,
 }) => {
-  const [activeDate, setActiveDate] = useState(() => {
+  // Start at the month of the currently selected check-in (or Aug 2026)
+  const [activeDate, setActiveDate] = useState<Date>(() => {
     if (currentCheckIn) {
-      const d = new Date(currentCheckIn);
-      if (!isNaN(d.getTime())) return d;
+      const d = new Date(currentCheckIn + 'T00:00:00');
+      if (!isNaN(d.getTime())) return new Date(d.getFullYear(), d.getMonth(), 1);
     }
-    // Default to August 2026 as in design/screenshot or current year
-    return new Date(2026, 7, 1);
+    return new Date(2026, 7, 1); // August 2026
   });
 
   const [selectedHouse, setSelectedHouse] = useState<string>(currentHouseId);
   const [selectedIn, setSelectedIn] = useState<string>(currentCheckIn || '');
   const [selectedOut, setSelectedOut] = useState<string>(currentCheckOut || '');
+  // step 0 = choosing check-in, step 1 = choosing check-out
+  const [step, setStep] = useState<0 | 1>(0);
 
+  // Sync props → local state each time modal opens
   useEffect(() => {
     if (isOpen) {
-      if (currentHouseId) setSelectedHouse(currentHouseId);
-      if (currentCheckIn) setSelectedIn(currentCheckIn);
-      if (currentCheckOut) setSelectedOut(currentCheckOut);
+      setSelectedHouse(currentHouseId || 'a_frame');
+      setSelectedIn(currentCheckIn || '');
+      setSelectedOut(currentCheckOut || '');
+      setStep(0);
+      if (currentCheckIn) {
+        const d = new Date(currentCheckIn + 'T00:00:00');
+        if (!isNaN(d.getTime())) setActiveDate(new Date(d.getFullYear(), d.getMonth(), 1));
+      }
     }
   }, [isOpen, currentHouseId, currentCheckIn, currentCheckOut]);
 
-  // Keyboard Escape listener
+  // Escape key
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
-    if (isOpen) {
-      window.addEventListener('keydown', handleKeyDown);
-    }
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [isOpen, onClose]);
 
-  const year = activeDate.getFullYear();
-  const month = activeDate.getMonth();
+  // Lock body scroll
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
 
-  const daysInMonth = useMemo(() => {
-    return new Date(year, month + 1, 0).getDate();
-  }, [year, month]);
+  const year = activeDate.getFullYear();
+  const month = activeDate.getMonth(); // 0-indexed
 
   const monthDays = useMemo(() => {
-    const days: { dayNum: number; dateStr: string; weekday: number }[] = [];
-    for (let d = 1; d <= daysInMonth; d++) {
-      const curDate = new Date(year, month, d);
-      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-      // convert 0 (Sunday) to 6, 1 (Monday) to 0
-      const jsDay = curDate.getDay();
-      const weekday = jsDay === 0 ? 6 : jsDay - 1;
-      days.push({ dayNum: d, dateStr, weekday });
-    }
-    return days;
-  }, [year, month, daysInMonth]);
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    return Array.from({ length: daysInMonth }, (_, i) => {
+      const day = i + 1;
+      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      const jsDay = new Date(year, month, day).getDay();
+      const weekday = jsDay === 0 ? 6 : jsDay - 1; // Mon=0 … Sun=6
+      return { day, dateStr, weekday };
+    });
+  }, [year, month]);
 
-  const handlePrevMonth = () => {
-    setActiveDate(new Date(year, month - 1, 1));
-  };
+  const handlePrev = () => setActiveDate(new Date(year, month - 1, 1));
+  const handleNext = () => setActiveDate(new Date(year, month + 1, 1));
 
-  const handleNextMonth = () => {
-    setActiveDate(new Date(year, month + 1, 1));
-  };
+  const handleCellClick = (houseId: string, dateStr: string, booked: boolean, past: boolean) => {
+    if (booked || past) return;
 
-  const handleDayClick = (houseId: string, dateStr: string, isBooked: boolean, isPast: boolean) => {
-    if (isBooked || isPast) return;
-
-    if (selectedHouse !== houseId) {
+    // Clicking a different house resets selection
+    if (houseId !== selectedHouse) {
       setSelectedHouse(houseId);
       setSelectedIn(dateStr);
-      // set checkOut to next day
-      const d = new Date(dateStr);
-      d.setDate(d.getDate() + 1);
-      const nextDayStr = d.toISOString().split('T')[0];
-      setSelectedOut(nextDayStr);
+      setSelectedOut('');
+      setStep(1);
       return;
     }
 
-    if (!selectedIn || (selectedIn && selectedOut)) {
+    if (step === 0 || !selectedIn) {
       setSelectedIn(dateStr);
-      const d = new Date(dateStr);
-      d.setDate(d.getDate() + 1);
-      const nextDayStr = d.toISOString().split('T')[0];
-      setSelectedOut(nextDayStr);
-    } else if (selectedIn && !selectedOut) {
+      setSelectedOut('');
+      setStep(1);
+    } else {
+      // step === 1: pick check-out
       if (dateStr > selectedIn) {
         setSelectedOut(dateStr);
+        setStep(0);
       } else {
+        // clicked before check-in – restart
         setSelectedIn(dateStr);
-        const d = new Date(dateStr);
-        d.setDate(d.getDate() + 1);
-        setSelectedOut(d.toISOString().split('T')[0]);
+        setSelectedOut('');
       }
     }
   };
@@ -185,12 +198,19 @@ export const AvailabilityMatrixModal: React.FC<AvailabilityMatrixModalProps> = (
 
   if (!isOpen) return null;
 
-  const currentHouseObj = HOUSES.find((h) => h.id === selectedHouse) || HOUSES[0];
+  const selectedHouseObj = HOUSES.find((h) => h.id === selectedHouse) || HOUSES[0];
 
   return (
-    <div className={styles.modalBackdrop} onClick={onClose} role="dialog" aria-modal="true">
+    <div
+      className={styles.modalBackdrop}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Шахматка занятости домов"
+    >
       <div className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
+
+        {/* ── Header ── */}
         <div className={styles.modalHeader}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Calendar size={18} color="var(--color-amber)" />
@@ -201,16 +221,16 @@ export const AvailabilityMatrixModal: React.FC<AvailabilityMatrixModalProps> = (
           </button>
         </div>
 
-        {/* Navigation Bar: Month & Legend */}
+        {/* ── Month nav + Legend ── */}
         <div className={styles.navBar}>
           <div className={styles.monthSwitcher}>
-            <button type="button" onClick={handlePrevMonth} className={styles.monthBtn} title="Предыдущий месяц">
+            <button type="button" onClick={handlePrev} className={styles.monthBtn} aria-label="Предыдущий месяц">
               <ChevronLeft size={18} />
             </button>
             <span className={styles.monthLabel}>
               {MONTH_NAMES[month]} {year}
             </span>
-            <button type="button" onClick={handleNextMonth} className={styles.monthBtn} title="Следующий месяц">
+            <button type="button" onClick={handleNext} className={styles.monthBtn} aria-label="Следующий месяц">
               <ChevronRight size={18} />
             </button>
           </div>
@@ -231,109 +251,128 @@ export const AvailabilityMatrixModal: React.FC<AvailabilityMatrixModalProps> = (
           </div>
         </div>
 
-        {/* Matrix Table */}
+        {/* Hint */}
+        <div style={{
+          padding: '6px 24px 0',
+          fontSize: '0.75rem',
+          color: 'var(--text-muted)',
+        }}>
+          {step === 0
+            ? 'Нажмите на зелёную дату — выберите дату заезда'
+            : `Заезд: ${selectedIn} — выберите дату выезда (нажмите дату позже)`}
+        </div>
+
+        {/* ── Matrix ── */}
         <div className={styles.matrixWrapper}>
           <table className={styles.matrixTable}>
             <thead>
               <tr>
                 <th className={styles.thHouse}>Дом</th>
-                {monthDays.map((d) => {
-                  const isWeekend = d.weekday === 5 || d.weekday === 6;
+                {monthDays.map(({ day, dateStr, weekday }) => {
+                  const isWknd = weekday >= 4; // Fri=4, Sat=5, Sun=6
                   return (
-                    <th key={d.dateStr} className={`${styles.thDay} ${isWeekend ? styles.thDayWeekend : ''}`}>
-                      <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', marginBottom: '2px' }}>
-                        {WEEKDAYS[d.weekday]}
+                    <th
+                      key={dateStr}
+                      className={[styles.thDay, isWknd ? styles.thDayWeekend : ''].join(' ')}
+                    >
+                      <div style={{ fontSize: '0.6rem', textTransform: 'uppercase' }}>
+                        {WEEKDAYS_SHORT[weekday]}
                       </div>
-                      <div style={{ fontWeight: 800 }}>{d.dayNum}</div>
+                      <div style={{ fontWeight: 800, fontSize: '0.8rem' }}>{day}</div>
                     </th>
                   );
                 })}
               </tr>
             </thead>
+
             <tbody>
-              {HOUSES.map((house) => {
-                const isCurrentHouse = selectedHouse === house.id;
-                return (
-                  <tr key={house.id} className={styles.houseRow}>
-                    <td className={styles.houseInfoCell}>
-                      <div className={styles.houseName}>{house.name}</div>
-                      <div className={styles.houseSub}>{house.badge}</div>
-                    </td>
+              {HOUSES.map((house) => (
+                <tr key={house.id} className={styles.houseRow}>
+                  {/* House name cell */}
+                  <td
+                    className={[
+                      styles.houseInfoCell,
+                      selectedHouse === house.id ? styles.houseInfoCellActive : '',
+                    ].join(' ')}
+                  >
+                    <div className={styles.houseName}>{house.name}</div>
+                    <div className={styles.houseSub}>{house.badge}</div>
+                  </td>
 
-                    {monthDays.map((d) => {
-                      const booked = isDateBooked(house.id, year, month, d.dayNum);
-                      // check past
-                      const todayStr = new Date().toISOString().split('T')[0];
-                      const isPast = d.dateStr < todayStr;
-                      
-                      // check selected
-                      const isSelected =
-                        isCurrentHouse &&
-                        selectedIn &&
-                        selectedOut &&
-                        d.dateStr >= selectedIn &&
-                        d.dateStr < selectedOut;
+                  {/* Day cells */}
+                  {monthDays.map(({ day, dateStr, weekday }) => {
+                    const booked = isDateBooked(house.id, dateStr);
+                    const past = dateStr < TODAY_STR;
 
-                      let btnClass = styles.dayBtn;
-                      if (isPast) {
-                        btnClass += ` ${styles.dayBtnPast}`;
-                      } else if (booked) {
-                        btnClass += ` ${styles.dayBtnBooked}`;
-                      } else {
-                        btnClass += ` ${styles.dayBtnAvailable}`;
-                      }
+                    const isInRange =
+                      selectedHouse === house.id &&
+                      selectedIn &&
+                      selectedOut &&
+                      dateStr >= selectedIn &&
+                      dateStr < selectedOut;
 
-                      if (isSelected) {
-                        btnClass += ` ${styles.dayBtnSelected}`;
-                      }
+                    const isCheckIn = selectedHouse === house.id && dateStr === selectedIn;
+                    const isWknd = weekday >= 4;
 
-                      return (
-                        <td key={d.dateStr} className={styles.dayCell}>
-                          <button
-                            type="button"
-                            className={btnClass}
-                            disabled={booked || isPast}
-                            onClick={() => handleDayClick(house.id, d.dateStr, booked, isPast)}
-                            title={
-                              isPast
-                                ? 'Прошедшая дата'
-                                : booked
-                                ? `${house.name}: Занято на ${d.dayNum} ${MONTH_NAMES[month]}`
-                                : `${house.name}: Свободно для бронирования`
-                            }
-                          >
-                            <span className={styles.dayNum}>{d.dayNum}</span>
-                            <span
-                              className={
-                                isPast
-                                  ? styles.statusIndicatorPast
-                                  : booked
-                                  ? styles.statusIndicatorBooked
-                                  : styles.statusIndicatorAvailable
-                              }
-                            />
-                          </button>
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
+                    // Determine indicator color
+                    let indicatorClass = styles.statusIndicatorAvailable;
+                    if (past) indicatorClass = styles.statusIndicatorPast;
+                    else if (booked) indicatorClass = styles.statusIndicatorBooked;
+                    else if (isInRange || isCheckIn) indicatorClass = styles.statusIndicatorSelected;
+
+                    // Button variant class
+                    let btnExtra = '';
+                    if (past) btnExtra = styles.dayBtnPast;
+                    else if (booked) btnExtra = styles.dayBtnBooked;
+                    else if (isCheckIn) btnExtra = styles.dayBtnCheckIn;
+                    else if (isInRange) btnExtra = styles.dayBtnSelected;
+                    else if (isWknd) btnExtra = styles.dayBtnWeekend;
+                    else btnExtra = styles.dayBtnAvailable;
+
+                    return (
+                      <td key={dateStr} className={styles.dayCell}>
+                        <button
+                          type="button"
+                          disabled={booked || past}
+                          className={[styles.dayBtn, btnExtra].join(' ')}
+                          onClick={() => handleCellClick(house.id, dateStr, booked, past)}
+                          title={
+                            past
+                              ? 'Прошедшая дата'
+                              : booked
+                              ? `${house.name} — Занято`
+                              : `${house.name} — Свободно`
+                          }
+                          aria-label={`${house.name} ${dateStr}`}
+                        >
+                          <span className={styles.dayNum}>{day}</span>
+                          <span className={indicatorClass} />
+                        </button>
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
 
-        {/* Footer with Selected Summary & Action */}
+        {/* ── Footer ── */}
         <div className={styles.modalFooter}>
           <div className={styles.selectionInfo}>
             {selectedIn && selectedOut ? (
-              <div>
-                Выбрано: <span className={styles.selectionHighlight}>{currentHouseObj.name}</span> c{' '}
-                <span className={styles.selectionHighlight}>{selectedIn}</span> по{' '}
+              <span>
+                Выбрано:{' '}
+                <span className={styles.selectionHighlight}>{selectedHouseObj.name}</span>
+                {' '}·{' '}
+                <span className={styles.selectionHighlight}>{selectedIn}</span>
+                {' → '}
                 <span className={styles.selectionHighlight}>{selectedOut}</span>
-              </div>
+              </span>
+            ) : selectedIn ? (
+              <span>Заезд: <span className={styles.selectionHighlight}>{selectedIn}</span> — выберите дату выезда</span>
             ) : (
-              <div>Нажмите на свободную зеленую дату для выбора дома и периода отдыха</div>
+              <span>Нажмите на зелёную дату для выбора заезда</span>
             )}
           </div>
 
@@ -343,7 +382,8 @@ export const AvailabilityMatrixModal: React.FC<AvailabilityMatrixModalProps> = (
             onClick={handleApply}
             disabled={!selectedIn || !selectedOut}
           >
-            <Check size={16} /> Применить даты в калькулятор
+            <Check size={16} />
+            Применить в калькулятор
           </button>
         </div>
       </div>
