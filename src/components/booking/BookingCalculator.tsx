@@ -279,30 +279,38 @@ export const BookingCalculator: React.FC<BookingCalculatorProps> = ({
 
                 {/* 2. Dates & Guests */}
                 <div className={styles.datesGrid}>
+                  {/* Check-in — opens matrix */}
                   <div className={styles.fieldBlock}>
                     <label className={styles.fieldLabel}>
                       <Calendar size={14} /> Заезд (с 15:00):
                     </label>
-                    <input
-                      type="date"
-                      value={checkIn}
-                      min={formatDateStr(today)}
-                      onChange={(e) => setCheckIn(e.target.value)}
-                      className={styles.dateInput}
-                    />
+                    <button
+                      type="button"
+                      className={styles.datePickerBtn}
+                      onClick={() => setMatrixOpen(true)}
+                    >
+                      {checkIn
+                        ? new Date(checkIn + 'T00:00:00').toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
+                        : 'Выбрать дату →'}
+                      <Calendar size={14} style={{ opacity: 0.55 }} />
+                    </button>
                   </div>
 
+                  {/* Check-out — opens matrix */}
                   <div className={styles.fieldBlock}>
                     <label className={styles.fieldLabel}>
                       <Calendar size={14} /> Выезд (до 12:00):
                     </label>
-                    <input
-                      type="date"
-                      value={checkOut}
-                      min={checkIn}
-                      onChange={(e) => setCheckOut(e.target.value)}
-                      className={styles.dateInput}
-                    />
+                    <button
+                      type="button"
+                      className={styles.datePickerBtn}
+                      onClick={() => setMatrixOpen(true)}
+                    >
+                      {checkOut
+                        ? new Date(checkOut + 'T00:00:00').toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
+                        : 'Выбрать дату →'}
+                      <Calendar size={14} style={{ opacity: 0.55 }} />
+                    </button>
                   </div>
 
                   <div className={styles.fieldBlock}>

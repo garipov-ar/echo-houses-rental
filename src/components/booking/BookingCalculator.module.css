@@ -148,28 +148,41 @@
   text-transform: uppercase;
 }
 
-.dateInput {
+.datePickerBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   background: var(--bg-main);
   border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: 11px 14px;
   font-size: 0.9375rem;
   color: #FFFFFF;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  color-scheme: dark;
+  text-align: left;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 
-.dateInput::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-  filter: invert(1) brightness(1.8);
-  opacity: 0.9;
-  padding: 2px;
-  transition: all var(--transition-fast);
-}
-
-.dateInput:focus {
+.datePickerBtn:hover {
   border-color: var(--color-amber);
+  background: rgba(229, 122, 34, 0.07);
+  box-shadow: 0 0 0 3px rgba(229, 122, 34, 0.15);
+}
+
+.datePickerBtn:focus-visible {
+  outline: none;
+  border-color: var(--color-amber);
+  box-shadow: 0 0 0 3px rgba(229, 122, 34, 0.25);
+}
+
+/* placeholder state when no date selected */
+.datePickerBtn:not(:has(+ *)) {
+  color: var(--text-muted);
 }
 
 .counterWrap {
